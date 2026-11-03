@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หมู่บ้านเห็ดแฟนตาซี - ค้นหาอีเมลและรหัสผ่านนักเรียน</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mushroom-red': '#E53E3E',
+                        'mushroom-dark-red': '#C53030',
+                        'sky-blue': '#63B3ED',
+                        'sky-light': '#EBF8FF',
+                        'grass-green': '#48BB78',
+                        'grass-light': '#F0FFF4',
+                        'hill-green': '#38A169',
+                        'sunny-yellow': '#ECC94B',
+                        'clay-orange': '#ED8936',
+                    },
+                    fontFamily: {
+                        'kanit': ['Kanit', 'sans-serif'],
+                        'prompt': ['Prompt', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'fun': '0 8px 0px 0px rgba(0, 0, 0, 0.15)',
+                        'fun-lg': '0 12px 0px 0px rgba(0, 0, 0, 0.15)',
+                        'cloud': '0 10px 25px -5px rgba(255, 255, 255, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(180deg, #70C1FF 0%, #BEE3F8 45%, #9AE6B4 70%, #48BB78 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Elements */
+        .cloud-float {
+            animation: floatCloud 18s linear infinite;
+        }
+        .cloud-float-slow {
+            animation: floatCloud 28s linear infinite;
+        }
+        @keyframes floatCloud {
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(calc(100vw + 150px)); }
+        }
+
+        .balloon-float {
+            animation: floatBalloon 4s ease-in-out infinite alternate;
+        }
+        @keyframes floatBalloon {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            100% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .bounce-gentle {
+            animation: bounceGentle 2s infinite;
+        }
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EBF8FF;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #48BB78;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38A169;
+        }
+
+        .mushroom-hat {
+            background-color: #E53E3E;
+            background-image: radial-gradient(#FFFFFF 20%, transparent 20%);
+            background-size: 35px 35px;
+            background-position: 0 0, 17.5px 17.5px;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between text-gray-800 min-h-screen">
+
+    <!-- Background Decoration Graphics -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <!-- Floating Clouds -->
+        <div class="cloud-float absolute top-8 left-0 text-white/90 text-7xl"><i class="fa-solid fa-cloud"></i></div>
+        <div class="cloud-float-slow absolute top-20 left-1/3 text-white/80 text-8xl"><i class="fa-solid fa-cloud"></i></div>
+        <div class="cloud-float absolute top-12 left-2/3 text-white/75 text-6xl"><i class="fa-solid fa-cloud"></i></div>
+
+        <!-- Hot Air Balloons -->
+        <div class="balloon-float absolute top-16 right-12 text-mushroom-red text-4xl drop-shadow-md hidden sm:block">
+            <i class="fa-solid fa-parachute-box text-sunny-yellow"></i>
+        </div>
+        <div class="balloon-float absolute top-36 left-10 text-sky-500 text-3xl drop-shadow-md hidden md:block" style="animation-delay: -2s;">
+            <i class="fa-solid fa-balloon text-pink-400"></i>
+        </div>
+
+        <!-- Hills background footer art -->
+        <div class="absolute bottom-0 w-full h-32 md:h-48 bg-gradient-to-t from-green-600 to-transparent opacity-40"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 container mx-auto px-4 py-6 max-w-5xl flex-grow flex flex-col">
+
+        <!-- Top Header / Banner -->
+        <header class="text-center mb-6">
+            <!-- Header Mushroom Badge -->
+            <div class="inline-block relative">
+                <div class="w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full mushroom-hat border-4 border-white shadow-lg flex items-center justify-center transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <span class="text-white text-4xl md:text-5xl font-extrabold drop-shadow-md">
+                        <i class="fa-solid fa-house-chimney-window"></i>
+                    </span>
+                </div>
+                <!-- Little door graphic -->
+                <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-10 bg-amber-800 border-2 border-amber-900 rounded-t-full shadow-inner"></div>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-wide mt-3 drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)]">
+                🍄 หมู่บ้านเห็ดตรวจสอบอีเมล 🍄
+            </h1>
+            <p class="text-white text-lg md:text-xl font-medium mt-1 drop-shadow-sm bg-white/30 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
+                ค้นหานามสกุล ชื่อ หรือชั้นเรียน เพื่อดูอีเมลและรหัสผ่านของนักเรียน
+            </p>
+        </header>
+
+        <!-- Navbar Action Buttons -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm text-green-800 font-bold text-sm md:text-base border-2 border-green-300">
+                <i class="fa-solid fa-graduation-cap mr-2"></i>นักเรียนทั้งหมด: <span id="studentCount" class="text-mushroom-red font-black text-lg">0</span> คน
+            </div>
+
+            <!-- Teacher Login Button -->
+            <button onclick="openTeacherModal()" class="bg-sunny-yellow hover:bg-yellow-400 text-amber-900 font-bold px-5 py-2.5 rounded-2xl shadow-fun hover:translate-y-1 transition-all duration-150 flex items-center gap-2 border-2 border-amber-300 text-sm md:text-base">
+                <i class="fa-solid fa-user-lock text-amber-800"></i>
+                <span>ระบบสำหรับคุณครู</span>
+            </button>
+        </div>
+
+        <!-- Student View Section -->
+        <main class="bg-white/95 backdrop-blur-md rounded-3xl p-4 md:p-8 shadow-fun-lg border-4 border-white mb-10">
+            
+            <!-- Search Bar -->
+            <div class="relative max-w-2xl mx-auto mb-8">
+                <div class="relative flex items-center">
+                    <input type="text" id="searchInput" oninput="filterStudents()" 
+                        placeholder="พิมพ์ชื่อ, นามสกุล หรือ ชั้นเรียน (เช่น ป.5/1)..." 
+                        class="w-full pl-14 pr-12 py-4 text-lg md:text-xl font-medium rounded-2xl border-4 border-sky-300 focus:border-sky-500 focus:outline-none shadow-inner transition-colors bg-sky-50/50">
+                    <div class="absolute left-4 text-sky-400 text-2xl pointer-events-none">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-4 text-gray-400 hover:text-red-500 text-xl p-1">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+                <p class="text-xs md:text-sm text-gray-500 mt-2 ml-3 flex items-center gap-1">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i> ตัวอย่างการค้นหา: <span>"สมชาย"</span>, <span>"ป.1/1"</span> หรือ <span>"STD-001"</span>
+                </p>
+            </div>
+
+            <!-- Student Grid List -->
+            <div id="studentGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <!-- Cards dynamically generated via JavaScript -->
+            </div>
+
+            <!-- Empty Search State -->
+            <div id="emptyState" class="hidden text-center py-12">
+                <div class="text-6xl text-gray-300 mb-3"><i class="fa-solid fa-ghost"></i></div>
+                <h3 class="text-2xl font-bold text-gray-600">ไม่พบข้อมูลนักเรียน</h3>
+                <p class="text-gray-400 mt-1">ลองค้นหาด้วยชื่ออื่น หรือติดต่อคุณครูประจำเป็นชั้นนะครับ</p>
+            </div>
+        </main>
+
+        <!-- Teacher Dashboard Section (Hidden by default) -->
+        <section id="teacherSection" class="hidden bg-amber-50/95 backdrop-blur-md rounded-3xl p-5 md:p-8 shadow-fun-lg border-4 border-amber-200 mb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-amber-200 pb-4 mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-amber-900 flex items-center gap-2">
+                        <i class="fa-solid fa-chalkboard-user text-mushroom-red"></i>
+                        ระบบจัดการข้อมูลนักเรียน (สำหรับคุณครู)
+                    </h2>
+                    <p class="text-sm text-amber-700">คุณครูสามารถ เพิ่ม แก้ไข หรือลบรายชื่อนักเรียนได้ที่นี่</p>
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="openAddModal()" class="flex-1 md:flex-initial bg-grass-green hover:bg-green-600 text-white font-bold px-4 py-2.5 rounded-xl shadow-md hover:scale-105 transition-all text-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus-circle"></i> เพิ่มนักเรียนใหม่
+                    </button>
+                    <button onclick="closeTeacherMode()" class="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> ออกจากระบบครู
+                    </button>
+                </div>
+            </div>
+
+            <!-- Teacher Data Table -->
+            <div class="overflow-x-auto bg-white rounded-2xl shadow-sm border border-amber-200">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-amber-100/70 text-amber-900 text-sm md:text-base border-b border-amber-200">
+                            <th class="p-3.5">ชื่อ</th>
+                            <th class="p-3.5">นามสกุล</th>
+                            <th class="p-3.5">ชั้นเรียน</th>
+                            <th class="p-3.5">อีเมล (Username)</th>
+                            <th class="p-3.5">รหัสผ่าน</th>
+                            <th class="p-3.5 text-center">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teacherTableBody" class="divide-y divide-gray-100 text-sm md:text-base">
+                        <!-- Table rows populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-4 bg-green-800/80 backdrop-blur-md text-white/90 text-sm">
+        <p>🍄 โรงเรียนบ้านเห็ดหรรษา &copy; ระบบตรวจสอบข้อมูลเข้าใช้งานสำหรับนักเรียน</p>
+    </footer>
+
+    <!-- MODALS -->
+
+    <!-- Modal 1: Teacher Password Lock -->
+    <div id="passwordModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-fun-lg border-4 border-sunny-yellow transform transition-all scale-100">
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto text-3xl mb-3">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">ยืนยันตัวตนคุณครู</h3>
+                <p class="text-gray-500 text-sm mt-1">กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบผู้ดูแล (Default: 1234)</p>
+            </div>
+            
+            <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="teacherPasswordInput" placeholder="กรอกรหัสผ่านครู..." required 
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none text-center text-xl tracking-widest font-bold">
+                    <p id="passwordError" class="text-red-500 text-xs mt-1 text-center hidden">รหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่ (1234)</p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeTeacherModal()" class="w-1/2 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" class="w-1/2 py-3 bg-sunny-yellow hover:bg-yellow-400 text-amber-900 font-bold rounded-xl shadow-md">
+                        เข้าสู่ระบบ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Add/Edit Student Modal -->
+    <div id="studentFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-fun-lg border-4 border-grass-green relative">
+            <button onclick="closeStudentModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="formTitle" class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-plus text-grass-green"></i> เพิ่มนักเรียนใหม่
+            </h3>
+
+            <form onsubmit="saveStudent(event)" class="space-y-4">
+                <input type="hidden" id="editIndex" value="-1">
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">รหัสประจำตัวนักเรียน</label>
+                    <input type="text" id="formStudentId" placeholder="เช่น STD-005" required
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-grass-green focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                    <input type="text" id="formName" placeholder="เด็กชาย ใจดี มีสุข" required
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-grass-green focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ชั้นเรียน</label>
+                    <input type="text" id="formGrade" placeholder="เช่น ป.1/1" required
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-grass-green focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">อีเมลสำหรับเข้าใช้งาน</label>
+                    <input type="email" id="formEmail" placeholder="student@school.ac.th" required
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-grass-green focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="text" id="formPassword" placeholder="ตั้งรหัสผ่าน..." required
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-gray-300 focus:border-grass-green focus:outline-none">
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="closeStudentModal()" class="w-1/2 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" class="w-1/2 py-3 bg-grass-green hover:bg-green-600 text-white font-bold rounded-xl shadow-md">
+                        บันทึกข้อมูล
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-green-400 text-xl"></i>
+        <span id="toastMessage">คัดลอกเรียบร้อยแล้ว!</span>
+    </div>
+
+    <!-- JavaScript App Logic -->
+    <script>
+        // Initial Dummy Data
+        const initialStudents = [
+              // --- ป.5/1 ---
+            { id: "STD1-01", name: "เด็กชายปัณณทัต ชุมทอง", grade: "ป.5/1", email: "P41_1@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-02", name: "เด็กชายธนาศิทธ์ แก้วคล้าย", grade: "ป.5/1", email: "P41_2@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-03", name: "เด็กหญิงเมธาวี รัตนะ", grade: "ป.5/1", email: "P41_3@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-04", name: "เด็กหญิงธัญญามาส บุญอมร", grade: "ป.5/1", email: "P41_4@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-05", name: "เด็กชายภาคิน อินคง", grade: "ป.5/1", email: "P41_5@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-06", name: "เด็กชายพลวัต อนันต์", grade: "ป.5/1", email: "P41_6@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-07", name: "เด็กหญิงนิสรีน ขวัญพรหม", grade: "ป.5/1", email: "P41_7@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-08", name: "เด็กหญิงซุลฟา สีสมาน", grade: "ป.5/1", email: "P41_8@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-09", name: "เด็กชายกลวัชร จันทนา", grade: "ป.5/1", email: "P41_9@bannathawee.ac.th", password: "bannathawee" },
+            { id: "STD1-10", name: "เด็กหญิงญาณัฐฉรา ชูศรี", grade: "ป.5/1", email: "P41_10@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-11", name: "เด็กหญิงนูรดีน่า ขะเคหรี", grade: "ป.5/1", email: "P41_11@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-12", name: "เด็กหญิงภูริสญา ทองแก้ว", grade: "ป.5/1", email: "P41_12@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-13", name: "เด็กชายสิรวิชญ์ แก้วเพ็ง", grade: "ป.5/1", email: "P41_13@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-14", name: "เด็กหญิงริฟฟาอ์ เครือผือ", grade: "ป.5/1", email: "P41_14@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-15", name: "เด็กชายผไทธร ยะโสธะโร", grade: "ป.5/1", email: "P41_15@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-16", name: "เด็กชายณพสิษฐ์ ชิตไชย", grade: "ป.5/1", email: "P41_16@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-17", name: "เด็กชายกลทีป์ อุทัยสุริ", grade: "ป.5/1", email: "P41_17@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-18", name: "เด็กชายฐิติภัทร หมื่นจันทร์", grade: "ป.5/1", email: "P41_18@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-19", name: "เด็กชายธีรวัฒน์ นาชัยดุลย์", grade: "ป.5/1", email: "P41_19@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-20", name: "เด็กชายปภาวิน ภวัตชานิธิกาญ", grade: "ป.5/1", email: "P41_20@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-21", name: "เด็กชายปยุต ไชยแพทย์", grade: "ป.5/1", email: "P41_21@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-22", name: "เด็กชายปวรวุธ รณรงค์ชัย", grade: "ป.5/1", email: "P41_22@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-23", name: "เด็กชายภูวเดช ศรีสุวรรณ", grade: "ป.5/1", email: "P41_23@bannathawee.ac.th", password: "bannathawee" },
+			{ id: "STD1-24", name: "เด็กชายอติภูมิ เอียดเอก", grade: "ป.5/1", email: "P41_24@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-25", name: "เด็กหญิงกัญญาณัฐ ขุนจัน", grade: "ป.5/1", email: "P41_25@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-26", name: "เด็กหญิงขวัญจิรา สุขสําราญ", grade: "ป.5/1", email: "P41_26@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-27", name: "เด็กหญิงเปมิกา ชุมหนู", grade: "ป.5/1", email: "P41_27@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-28", name: "เด็กหญิงณัฎฐณิชา โกวิทยา", grade: "ป.5/1", email: "P41_28@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-29", name: "เด็กหญิงปุณณดา สังข์ทองกูล", grade: "ป.5/1", email: "P41_29@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-30", name: "เด็กหญิงพิมพ์ชนิตา สุวรรณรัตน์", grade: "ป.5/1", email: "P41_30@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-31", name: "เด็กหญิงอินทิราวดี มากละม้าย", grade: "ป.5/1", email: "P41_31@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-32", name: "เด็กหญิงภัสสร พลคํา", grade: "ป.5/1", email: "P41_32@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-33", name: "เด็กชายพุฒิตรัย แซ่ฉิ้น", grade: "ป.5/1", email: "P41_33@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-34", name: "เด็กชายจิรายุ พรหมสมปาน", grade: "ป.5/1", email: "P41_34@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-35", name: "เด็กชายฮัสซัน หีมเบ็ญหมัด", grade: "ป.5/1", email: "P41_35@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-36", name: "เด็กชายชยุตรา ก่อก่อคง", grade: "ป.5/1", email: "P41_36@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-37", name: "เด็กชายชีร์ธวัช สุโคตรพรหมมี", grade: "ป.5/1", email: "P41_37@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-38", name: "เด็กชายณัฐพัฒธ์ ทองนวล", grade: "ป.5/1", email: "P41_38@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-39", name: "เด็กชายชญานนท์ คงชีพ", grade: "ป.5/1", email: "P41_39@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-40", name: "เด็กหญิงศิรภัสสร ทองเกลี้ยง", grade: "ป.5/1", email: "P41_40@bannathawee.ac.th", password: "bannathawee" },
+	{ id: "STD1-41", name: "เด็กชายกรวิชญ์ เกตุรักษ์", grade: "ป.5/1", email: "P41_41@bannathawee.ac.th", password: "bannathawee" },
+
+            // --- ป.5/2 ---
+ { id: "STD2-01", name: "เด็กหญิงธนภรณ์ หนูแก้ว", grade: "ป.5/2", email: "P42_1@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-02", name: "เด็กชายชวภัทร สวนจันทร์", grade: "ป.5/2", email: "P42_2@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-03", name: "เด็กชายนัธทวัฒน์ จินดา", grade: "ป.5/2", email: "P42_3@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-04", name: "เด็กหญิงบุญณิศา สิงห์หนู", grade: "ป.5/2", email: "P42_4@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-05", name: "เด็กหญิงไอรดา หวันชิตนาย", grade: "ป.5/2", email: "P42_5@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-06", name: "เด็กหญิงพิชญาภา คล้ายศรี", grade: "ป.5/2", email: "P42_6@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-07", name: "เด็กหญิงนัฐฐานั้น แทนบุญ", grade: "ป.5/2", email: "P42_7@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-08", name: "เด็กชายธรณ์เทพ ทองศรีแก้ว", grade: "ป.5/2", email: "P42_8@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-09", name: "เด็กชายธนดล เพ็ชรขวัญ", grade: "ป.5/2", email: "P42_9@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-10", name: "เด็กหญิงปพิชญา มุณีแนม", grade: "ป.5/2", email: "P42_10@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-11", name: "เด็กหญิงชวัลลักษณ์ เสียงหอม", grade: "ป.5/2", email: "P42_11@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-12", name: "เด็กหญิงกัลยกร วงศ์วุฒิรัตน์กุล", grade: "ป.5/2", email: "P42_12@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-13", name: "เด็กหญิงธนพร ทองศรีนวล", grade: "ป.5/2", email: "P42_13@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-14", name: "เด็กหญิงสุณิสา สุขมิ่ง", grade: "ป.5/2", email: "P42_14@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-15", name: "เด็กชายชนกันต์ จันทรัตน์", grade: "ป.5/2", email: "P42_15@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-16", name: "เด็กชายเตวิช เทพแก้ว", grade: "ป.5/2", email: "P42_16@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-17", name: "เด็กชายถวรรญกร ทองบานเย็น", grade: "ป.5/2", email: "P42_17@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-18", name: "เด็กชายปัณณ์ รัตนวิสุทธิ์", grade: "ป.5/2", email: "P42_18@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-19", name: "เด็กชายปภังกร มุณีบังเกิด", grade: "ป.5/2", email: "P42_19@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-20", name: "เด็กชายพัทธดนย์ อําพะวัน", grade: "ป.5/2", email: "P42_20@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-21", name: "เด็กหญิงกัญญาภัค ทองขวัญ", grade: "ป.5/2", email: "P42_21@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-22", name: "เด็กหญิงณัฐวลัญซ์ เรือนทอง", grade: "ป.5/2", email: "P42_22@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-23", name: "เด็กหญิงณัทณลัลน์ ละกะเต็บ", grade: "ป.5/2", email: "P42_23@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-24", name: "เด็กหญิงธิติมา มาละ", grade: "ป.5/2", email: "P42_24@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-25", name: "เด็กหญิงปิ่นพลอย บุญมาก", grade: "ป.5/2", email: "P42_25@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-26", name: "เด็กหญิงร่วมขวัญ ร่มแก้ว", grade: "ป.5/2", email: "P42_26@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-27", name: "เด็กหญิงสุพิชญ์ชญา จันทร์ธํารงค์", grade: "ป.5/2", email: "P42_27@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-28", name: "เด็กหญิงชนาภัทร แสงนพรัตน์", grade: "ป.5/2", email: "P42_28@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD2-29", name: "เด็กหญิงกันย์ศินี พีระพัฒน์", grade: "ป.5/2", email: "P42_29@bannathawee.ac.th", password: "bannathawee" },
+            // --- ป.5/3 ---
+    { id: "STD3-01", name: "เด็กชายกิตติชาติ ยวงใย", grade: "ป.5/3", email: "P43_1@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-02", name: "เด็กชายภูริวัฒ ไตรภูมิ", grade: "ป.5/3", email: "P43_2@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-03", name: "เด็กชายณัฐพัฒน์ โสยมัด", grade: "ป.5/3", email: "P43_3@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-04", name: "เด็กชายวีรภาพ ลายปาน", grade: "ป.5/3", email: "P43_4@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-05", name: "เด็กชายจิราธิวัฒน์ สุกใส", grade: "ป.5/3", email: "P43_5@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-06", name: "เด็กชายชยรพ นิลมณี", grade: "ป.5/3", email: "P43_6@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-07", name: "เด็กชายสุทธินันท์ บุญวัตร", grade: "ป.5/3", email: "P43_7@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-08", name: "เด็กชายณปาล ชูศรี", grade: "ป.5/3", email: "P43_8@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-09", name: "เด็กชายอัศวพงค์ ช่วยรัตน์", grade: "ป.5/3", email: "P43_9@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-10", name: "เด็กชายจิรายุ สุขสุวรรณ์", grade: "ป.5/3", email: "P43_10@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-11", name: "เด็กชายฟาริส เดชอรัญ", grade: "ป.5/3", email: "P43_11@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-12", name: "เด็กชายจิรยุทธ์ คงดํา", grade: "ป.5/3", email: "P43_12@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-13", name: "เด็กชายปัณณวัฒน์ อินทภูมิ", grade: "ป.5/3", email: "P43_13@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-14", name: "เด็กชายชยพล หนูเจริญ", grade: "ป.5/3", email: "P43_14@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-15", name: "เด็กชายกันตภณ กลั่นทอง", grade: "ป.5/3", email: "P43_15@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-16", name: "เด็กชายกิตติชัย สุวรรณอารี", grade: "ป.5/3", email: "P43_16@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-17", name: "เด็กชายจตุพงศ์ บุญฤทธิ์", grade: "ป.5/3", email: "P43_17@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-18", name: "เด็กชายภูริภัทร หน่อแก้ว", grade: "ป.5/3", email: "P43_18@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-19", name: "เด็กชายณัฐพงษ์ ชายชูจีน", grade: "ป.5/3", email: "P43_19@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-20", name: "เด็กหญิงสรัลพร คงดํา", grade: "ป.5/3", email: "P43_20@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-21", name: "เด็กหญิงณัฐวรรณ์ แก้วทอง", grade: "ป.5/3", email: "P43_21@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-22", name: "เด็กหญิงชัญญานุช แสนเกื้อ", grade: "ป.5/3", email: "P43_22@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-23", name: "เด็กหญิงณัฏฐนันท์ ศรีทอง", grade: "ป.5/3", email: "P43_23@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-24", name: "เด็กหญิงเทียนธีรา พรมประดิษฐ์", grade: "ป.5/3", email: "P43_24@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-25", name: "เด็กหญิงณชสา สารานพคุณ", grade: "ป.5/3", email: "P43_25@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-26", name: "เด็กหญิงณิชตา สารานพคุณ", grade: "ป.5/3", email: "P43_26@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-27", name: "เด็กหญิงกุลนันทน์ ไหมสุวรรณ", grade: "ป.5/3", email: "P43_27@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-28", name: "เด็กหญิงทักษญา ผู้วิเศษ", grade: "ป.5/3", email: "P43_28@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-29", name: "เด็กหญิงอามีนา มาหิเละ", grade: "ป.5/3", email: "P43_29@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-30", name: "เด็กหญิงชนวรรณ ณะแก้ว", grade: "ป.5/3", email: "P43_30@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-31", name: "เด็กหญิงไปรยา เรืองศรี", grade: "ป.5/3", email: "P43_31@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-32", name: "เด็กหญิงปรีญาวดี จันทร์นวล", grade: "ป.5/3", email: "P43_32@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-33", name: "เด็กหญิงมารียา ทองแก้ว", grade: "ป.5/3", email: "P43_33@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-34", name: "เด็กหญิงสโรชา พาฤทธิ์", grade: "ป.5/3", email: "P43_34@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-35", name: "เด็กหญิงมลฑิตา สืบประดิษฐ์", grade: "ป.5/3", email: "P43_35@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-36", name: "เด็กหญิงปริณดา หิรัญพันธุ์", grade: "ป.5/3", email: "P43_36@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-37", name: "เด็กหญิงจิตติมา หรี่เรไร", grade: "ป.5/3", email: "P43_37@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-38", name: "เด็กหญิงสิริวิมล รอดผล", grade: "ป.5/3", email: "P43_38@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-39", name: "เด็กหญิงณัฐณิชา ชะนะถาวร", grade: "ป.5/3", email: "P43_39@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD3-40", name: "เด็กหญิงปริณดา สุขนุ้ย", grade: "ป.5/3", email: "P43_40@bannathawee.ac.th", password: "bannathawee" },
+            // --- ป.5/4 ---
+{ id: "STD4-01", name: "เด็กชายวีระชาติ ยอดประดิษฐ์", grade: "ป.5/4", email: "P44_1@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-02", name: "เด็กชายกันติพัฒน์ บุตรวรรณแก้ว", grade: "ป.5/4", email: "P44_2@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-03", name: "เด็กชายกันตวิชญณ์ พูลสวัสดิ์", grade: "ป.5/4", email: "P44_3@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-04", name: "เด็กชายภาคิน ศิริเฉลิม", grade: "ป.5/4", email: "P44_4@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-05", name: "เด็กชายธีรภัทร แก้วทอง", grade: "ป.5/4", email: "P44_5@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-06", name: "เด็กชายต้นปุญญ์ ขวัญทอง", grade: "ป.5/4", email: "P44_6@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-07", name: "เด็กชายณัฐชนน แก้วแท้", grade: "ป.5/4", email: "P44_7@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-08", name: "เด็กชายกิตติณัฏร์ รักษาสุธากาญจน์", grade: "ป.5/4", email: "P44_8@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-09", name: "เด็กชายภูมิพัฒน์ มากมูล", grade: "ป.5/4", email: "P44_9@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-10", name: "เด็กชายชยพล เส้งซ้าย", grade: "ป.5/4", email: "P44_10@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-11", name: "เด็กชายปกรณ์ รูปโฉม", grade: "ป.5/4", email: "P44_11@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-12", name: "เด็กชายจักรพงษ์ มงคล", grade: "ป.5/4", email: "P44_12@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-13", name: "เด็กชายนพรัตน์ อรุณรัตน์", grade: "ป.5/4", email: "P44_13@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-14", name: "เด็กชายอัษศดินย์ สุวรรณวงศ์", grade: "ป.5/4", email: "P44_14@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-15", name: "เด็กชายปภังกร ไชยทอง", grade: "ป.5/4", email: "P44_15@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-16", name: "เด็กชายปรินทร พรหมมณี", grade: "ป.5/4", email: "P44_16@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-17", name: "เด็กชายมูฮัมหมัดนูร เอียดแอ", grade: "ป.5/4", email: "P44_17@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-18", name: "เด็กชายณัตรฐาวุฒิ เพชรรัตน์", grade: "ป.5/4", email: "P44_18@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-19", name: "เด็กหญิงวัลย์วรี ยอดสุข", grade: "ป.5/4", email: "P44_19@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-20", name: "เด็กหญิงชญานิษฐ์ สงโสม", grade: "ป.5/4", email: "P44_20@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-21", name: "เด็กหญิงธฤดี บัวคง", grade: "ป.5/4", email: "P44_21@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-22", name: "เด็กหญิงกัญญพัชร ทองศรีพราย", grade: "ป.5/4", email: "P44_22@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-23", name: "เด็กหญิงชลธิชา จาระนะ", grade: "ป.5/4", email: "P44_23@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-24", name: "เด็กหญิงกานต์รวี เมฆหมอก", grade: "ป.5/4", email: "P44_24@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-25", name: "เด็กหญิงวริศา นิลสุวรรณ์", grade: "ป.5/4", email: "P44_25@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-26", name: "เด็กหญิงทักษยา ปิติรัตนวรนาท", grade: "ป.5/4", email: "P44_26@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-27", name: "เด็กหญิงจันทิมันตุ์ อินทร์สุวรรณ", grade: "ป.5/4", email: "P44_27@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-28", name: "เด็กหญิงบุณญานุช สุวรรณมณี", grade: "ป.5/4", email: "P44_28@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-29", name: "เด็กหญิงพิมพ์ญาดา คงเพ็ชรศรี", grade: "ป.5/4", email: "P44_29@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-30", name: "เด็กหญิงมัลลิกา แป้นเอียด", grade: "ป.5/4", email: "P44_30@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-31", name: "เด็กหญิงฮาซามี จินดาภร", grade: "ป.5/4", email: "P44_31@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-32", name: "เด็กหญิงกานต์ธีรา แดงแก้ว", grade: "ป.5/4", email: "P44_32@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-33", name: "เด็กหญิงศวรรยา อินแก้ว", grade: "ป.5/4", email: "P44_33@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-34", name: "เด็กหญิงพิชยา พิทักษ์จินดา", grade: "ป.5/4", email: "P44_34@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-35", name: "เด็กหญิงอามีนา หมิดดิ้ง", grade: "ป.5/4", email: "P44_35@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-36", name: "เด็กหญิงนันทิดา พรหมสุวรรณ์", grade: "ป.5/4", email: "P44_36@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-37", name: "เด็กหญิงปุณธาวีร์ เส็นอาลามีน", grade: "ป.5/4", email: "P44_37@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-38", name: "เด็กหญิงภาณุมาศ กรดจันแก้ว", grade: "ป.5/4", email: "P44_38@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-39", name: "เด็กหญิงณฐิตา วุฒิเลิศพงศ์", grade: "ป.5/4", email: "P44_39@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-40", name: "เด็กหญิงอุมาภรณ์ ชุมแดง", grade: "ป.5/4", email: "P44_40@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD4-41", name: "เด็กหญิงสุภาวดี ดำเอียด", grade: "ป.5/4", email: "P44_41@bannathawee.ac.th", password: "bannathawee" },
+
+            // --- ป.5/5 ---
+           { id: "STD5-01", name: "เด็กหญิงนัสรีน ปะนัง", grade: "ป.5/5", email: "P45_1@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-02", name: "เด็กชายอดิสร โคราช", grade: "ป.5/5", email: "P45_2@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-03", name: "เด็กชายสิริยุทธ์ โคตะมี", grade: "ป.5/5", email: "P45_3@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-04", name: "เด็กหญิงอรัญญา เดชแก้ว", grade: "ป.5/5", email: "P45_4@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-05", name: "เด็กชายศิวัช วงศ์ษา", grade: "ป.5/5", email: "P45_5@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-06", name: "เด็กหญิงปนัดดา พรหมทอง", grade: "ป.5/5", email: "P45_6@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-07", name: "เด็กหญิงปัณฑารีย์ ทองสุวรรณ์", grade: "ป.5/5", email: "P45_7@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-08", name: "เด็กหญิงปื่นสุดา บุญคง", grade: "ป.5/5", email: "P45_8@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-09", name: "เด็กหญิงจิรัชญา สุวรรณมณี", grade: "ป.5/5", email: "P45_9@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-10", name: "เด็กหญิงอัยรีน บินรัตแก้ว", grade: "ป.5/5", email: "P45_10@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-11", name: "เด็กชายครองภพ ไชยทองสุข", grade: "ป.5/5", email: "P45_11@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-12", name: "เด็กหญิงธัญรวี ศรีประสม", grade: "ป.5/5", email: "P45_12@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-13", name: "เด็กหญิงกิตติมา เขียวหอม", grade: "ป.5/5", email: "P45_13@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-14", name: "เด็กหญิงอภิวิชญา หน่อแก้ว", grade: "ป.5/5", email: "P45_14@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-15", name: "เด็กชายกองกุณฑ์ หนูเอียด", grade: "ป.5/5", email: "P45_15@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-16", name: "เด็กหญิงกุลรัตน์ ไพฑูรย์", grade: "ป.5/5", email: "P45_16@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-17", name: "เด็กชายฆามินทร์ เมฆะมานัง", grade: "ป.5/5", email: "P45_17@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-18", name: "เด็กหญิงวรกานต์ พรมรัตน์", grade: "ป.5/5", email: "P45_18@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-19", name: "เด็กหญิงเบญญาภา ขวัญทองยิ้ม", grade: "ป.5/5", email: "P45_19@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-20", name: "เด็กหญิงศิตาพัชญ์ ชูศรี", grade: "ป.5/5", email: "P45_20@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-21", name: "เด็กหญิงสุภาวดี ชูขํา", grade: "ป.5/5", email: "P45_21@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-22", name: "เด็กชายกฤติเดช คล้ายศรี", grade: "ป.5/5", email: "P45_22@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-23", name: "เด็กชายณรงค์กร ทองนวล", grade: "ป.5/5", email: "P45_23@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-24", name: "เด็กชายธนสร พาหุมันโต", grade: "ป.5/5", email: "P45_24@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-25", name: "เด็กชายธนาพล ชํานาญสงค์", grade: "ป.5/5", email: "P45_25@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-26", name: "เด็กชายธีรดนย์ จันทร์มณี", grade: "ป.5/5", email: "P45_26@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-27", name: "เด็กชายปฐวี มีแสง", grade: "ป.5/5", email: "P45_27@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-28", name: "เด็กชายพีรพงค์ จําปาคํา", grade: "ป.5/5", email: "P45_28@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-29", name: "เด็กชายเมธาวัตร เรืองดารุณ", grade: "ป.5/5", email: "P45_29@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-30", name: "เด็กชายชีวานนท์ คล้ายศรี", grade: "ป.5/5", email: "P45_30@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-31", name: "เด็กหญิงพิรดา กลิ่นหอม", grade: "ป.5/5", email: "P45_31@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-32", name: "เด็กหญิงภูริชญา หนูสีคง", grade: "ป.5/5", email: "P45_32@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-33", name: "เด็กหญิงเมลดา พุ่มเฉิดฉัน", grade: "ป.5/5", email: "P45_33@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-34", name: "เด็กหญิงวริษฐา คงราม", grade: "ป.5/5", email: "P45_34@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-35", name: "เด็กหญิงสิริจรรยา ขุนพรหม", grade: "ป.5/5", email: "P45_35@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-36", name: "เด็กชายอาณัติฐพงษ์ คีรีนิล", grade: "ป.5/5", email: "P45_36@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-37", name: "เด็กหญิงณัฐรดา ทวะชาลี", grade: "ป.5/5", email: "P45_37@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-38", name: "เด็กชายศุภณัฐ เขียวขำ", grade: "ป.5/5", email: "P45_38@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-39", name: "เด็กหญิงภัคศรัณย์ ทิมทอง", grade: "ป.5/5", email: "P45_39@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD5-40", name: "เด็กชายก้องภพ ดวงศักดิ์", grade: "ป.5/5", email: "P45_40@bannathawee.ac.th", password: "bannathawee" },
+
+            // --- ป.5/6 ---
+          { id: "STD5-01", name: "เด็กหญิงพิมพ์ญาดา จินดานิมิตร", grade: "ป.5/6", email: "P46_1@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-02", name: "เด็กชายกันตภณ มงคลสศิริ", grade: "ป.5/6", email: "P46_2@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-03", name: "เด็กหญิงจิรชยา ขวัญทอง", grade: "ป.5/6", email: "P46_3@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-04", name: "เด็กหญิงฐิติชญาน์ มะหลีเฝน", grade: "ป.5/6", email: "P46_4@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-05", name: "เด็กหญิงพัทธนันท์ ลับแสง", grade: "ป.5/6", email: "P46_5@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-06", name: "เด็กชายภาคิน เพ็ชร์สิงห์", grade: "ป.5/6", email: "P46_6@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-07", name: "เด็กชายณัฏฐวี สังข์ทอง", grade: "ป.5/6", email: "P46_7@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-08", name: "เด็กหญิงพิชามญชุ์ บุญมี", grade: "ป.5/6", email: "P46_8@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-09", name: "เด็กหญิงอุนนดา จันทรัตน์", grade: "ป.5/6", email: "P46_9@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-10", name: "เด็กชายดนุภัทร มีผล", grade: "ป.5/6", email: "P46_10@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-11", name: "เด็กหญิงภัณฑิรา ทับเที่ยง", grade: "ป.5/6", email: "P46_11@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-12", name: "เด็กชายณัฏฐชัย ทองเกิด", grade: "ป.5/6", email: "P46_12@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-13", name: "เด็กชายณัฏฐพล ทองเกิด", grade: "ป.5/6", email: "P46_13@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-14", name: "เด็กหญิงเฮาวา เบ็ญยูโส๊ะ", grade: "ป.5/6", email: "P46_14@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-15", name: "เด็กชายนันทวัฒน์ พรหมทอง", grade: "ป.5/6", email: "P46_15@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-16", name: "เด็กหญิงพิชญ์สิมี คลังจันทร์", grade: "ป.5/6", email: "P46_16@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-17", name: "เด็กชายอัษฎา สมจิตต์", grade: "ป.5/6", email: "P46_17@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-18", name: "เด็กชายศิวะ เถาว์คํา", grade: "ป.5/6", email: "P46_18@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-19", name: "เด็กชายกุมภ์ โรจน์หัสดิน", grade: "ป.5/6", email: "P46_19@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-20", name: "เด็กชายณัฐพัชร สังข์ทอง", grade: "ป.5/6", email: "P46_20@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-21", name: "เด็กชายธนัดชัย ทองเกลี้ยง", grade: "ป.5/6", email: "P46_21@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-22", name: "เด็กชายภัทรพล สองเมือง", grade: "ป.5/6", email: "P46_22@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-23", name: "เด็กชายธนันชัย หนูมา", grade: "ป.5/6", email: "P46_23@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-24", name: "เด็กหญิงเปรมฤดี อิตัน", grade: "ป.5/6", email: "P46_24@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-25", name: "เด็กหญิงเมษยพร ทวนสุวรรณ์", grade: "ป.5/6", email: "P46_25@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-26", name: "เด็กหญิงปิยธิดา ศรีวิเศษ", grade: "ป.5/6", email: "P46_26@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-27", name: "เด็กหญิงภัธรวดี กระจ่างแผ้ว", grade: "ป.5/6", email: "P46_27@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-28", name: "เด็กชายนิติทร เพ็ชรสุทธิ์", grade: "ป.5/6", email: "P46_28@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-29", name: "เด็กหญิงขวัญจิรา แก้วไทรดวง", grade: "ป.5/6", email: "P46_29@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-30", name: "เด็กชายณัฏฐากรณ์ นพรัตน์", grade: "ป.5/6", email: "P46_30@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-31", name: "เด็กชายธิติเดช อัครพงษ์", grade: "ป.5/6", email: "P46_31@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-32", name: "เด็กชายนันทกร นันทวงค์", grade: "ป.5/6", email: "P46_32@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-33", name: "เด็กชายกวีวัฒน์ รัตนมัชชณิม", grade: "ป.5/6", email: "P46_33@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-34", name: "เด็กหญิงกนกวดี แสงสารี", grade: "ป.5/6", email: "P46_34@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-35", name: "เด็กหญิงชญาภัทร ศรีขวัญ", grade: "ป.5/6", email: "P46_35@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-36", name: "เด็กชายพงษ์พัฒน์ ไพโรจน์", grade: "ป.5/6", email: "P46_36@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-37", name: "เด็กหญิงดลนภา แก้วจันทร์", grade: "ป.5/6", email: "P46_37@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-38", name: "เด็กชายโชติพัฒน์ ชายพรม", grade: "ป.5/6", email: "P46_38@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-39", name: "เด็กชายศักดิชัช จันทวงค์", grade: "ป.5/6", email: "P46_39@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-40", name: "เด็กหญิงกวินธิดา เลี่ยงซู้", grade: "ป.5/6", email: "P46_40@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-41", name: "เด็กชายยทีบดินทร์ ไชยสุก", grade: "ป.5/6", email: "P46_41@bannathawee.ac.th", password: "bannathawee" },
+{ id: "STD6-42", name: "เด็กชายธนวรรธน์ บาบวด", grade: "ป.5/6", email: "P46_42@bannathawee.ac.th", password: "bannathawee" },
+
+        ];
+
+        let students = [];
+        const TEACHER_PASS = "1234";
+
+        // Load data on start
+        window.onload = function() {
+            const savedData = localStorage.getItem('mushroom_students');
+            if (savedData) {
+                try {
+                    students = JSON.parse(savedData);
+                    if (!Array.isArray(students) || students.length === 0) students = [...initialStudents];
+                } catch(e) {
+                    students = [...initialStudents];
+                }
+            } else {
+                students = [...initialStudents];
+                saveToLocalStorage();
+            }
+            renderStudentGrid(students);
+            renderTeacherTable();
+            updateCount();
+        };
+
+        function saveToLocalStorage() {
+            localStorage.setItem('mushroom_students', JSON.stringify(students));
+        }
+
+        function updateCount() {
+            document.getElementById('studentCount').innerText = students.length;
+        }
+
+        // Render Student View Cards
+        function renderStudentGrid(dataList) {
+            const grid = document.getElementById('studentGrid');
+            const emptyState = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            if (dataList.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            dataList.forEach((st, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-gradient-to-br from-white to-sky-50 rounded-2xl p-5 shadow-fun border-2 border-sky-100 hover:border-sky-300 transition-all duration-200 relative overflow-hidden group";
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-mushroom-red text-white font-bold flex items-center justify-center text-xl shadow-md border-2 border-white">
+                                <i class="fa-solid fa-child"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight">${st.name}</h3>
+                                <div class="flex gap-2 mt-1">
+                                    <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">${st.grade}</span>
+                                    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">${st.id}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mt-4 text-sm bg-white/80 p-3 rounded-xl border border-sky-100">
+                        <!-- Email Row -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                            <span class="text-gray-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-envelope text-sky-500"></i> อีเมลเข้าใช้งาน:
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono font-medium text-gray-700 break-all select-all">${st.email}</span>
+                                <button onclick="copyToClipboard('${st.email}', 'คัดลอกอีเมลเรียบร้อยแล้ว!')" class="text-sky-500 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 p-1.5 rounded-lg text-xs transition-colors" title="คัดลอกอีเมล">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Password Row -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pt-2 border-t border-gray-100">
+                            <span class="text-gray-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-key text-amber-500"></i> รหัสผ่าน:
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <input type="password" id="pass-${st.id}" value="${st.password}" readonly 
+                                    class="font-mono text-gray-700 bg-transparent border-none outline-none w-28 text-right font-bold">
+                                <button onclick="togglePasswordVisibility('pass-${st.id}', this)" class="text-gray-400 hover:text-gray-600 p-1 text-xs">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button onclick="copyToClipboard('${st.password}', 'คัดลอกรหัสผ่านเรียบร้อยแล้ว!')" class="text-amber-600 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 p-1.5 rounded-lg text-xs transition-colors" title="คัดลอกรหัสผ่าน">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Live Filter
+        function filterStudents() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            const filtered = students.filter(st => 
+                st.name.toLowerCase().includes(query) ||
+                st.id.toLowerCase().includes(query) ||
+                st.grade.toLowerCase().includes(query) ||
+                st.email.toLowerCase().includes(query)
+            );
+
+            renderStudentGrid(filtered);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterStudents();
+        }
+
+        // Password Show/Hide Toggle
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Copy Text Helper
+        function copyToClipboard(text, message) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast(message);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // TEACHER SYSTEM LOGIC
+        function openTeacherModal() {
+            document.getElementById('teacherPasswordInput').value = '';
+            document.getElementById('passwordError').classList.add('hidden');
+            document.getElementById('passwordModal').classList.remove('hidden');
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('passwordModal').classList.add('hidden');
+        }
+
+        function handleTeacherLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('teacherPasswordInput').value;
+            if (pass === TEACHER_PASS) {
+                closeTeacherModal();
+                document.getElementById('teacherSection').classList.remove('hidden');
+                document.getElementById('teacherSection').scrollIntoView({ behavior: 'smooth' });
+                showToast('เข้าสู่ระบบสำหรับคุณครูสำเร็จ!');
+            } else {
+                document.getElementById('passwordError').classList.remove('hidden');
+            }
+        }
+
+        function closeTeacherMode() {
+            document.getElementById('teacherSection').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Teacher Table
+        function renderTeacherTable() {
+            const tbody = document.getElementById('teacherTableBody');
+            tbody.innerHTML = '';
+
+            students.forEach((st, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-amber-50/50 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-3.5 font-semibold text-gray-700">${st.id}</td>
+                    <td class="p-3.5 font-bold text-gray-800">${st.name}</td>
+                    <td class="p-3.5"><span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-md">${st.grade}</span></td>
+                    <td class="p-3.5 font-mono text-xs text-gray-600">${st.email}</td>
+                    <td class="p-3.5 font-mono text-xs text-amber-900 font-bold">${st.password}</td>
+                    <td class="p-3.5 text-center">
+                        <div class="flex justify-center gap-2">
+                            <button onclick="openEditModal(${idx})" class="bg-sky-100 hover:bg-sky-200 text-sky-700 p-2 rounded-lg text-xs" title="แก้ไข">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteStudent(${idx})" class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg text-xs" title="ลบ">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Add/Edit Student Modals
+        function openAddModal() {
+            document.getElementById('editIndex').value = "-1";
+            document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-user-plus text-grass-green"></i> เพิ่มนักเรียนใหม่`;
+            document.getElementById('formName').value = '';
+            document.getElementById('formGrade').value = '';
+            document.getElementById('formEmail').value = '';
+            document.getElementById('formPassword').value = '';
+            document.getElementById('formStudentId').value = '';
+            document.getElementById('studentFormModal').classList.remove('hidden');
+        }
+
+        function openEditModal(index) {
+            const st = students[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('formTitle').innerHTML = `<i class="fa-solid fa-user-pen text-amber-500"></i> แก้ไขข้อมูลนักเรียน`;
+            document.getElementById('formStudentId').value = st.id;
+            document.getElementById('formName').value = st.name;
+            document.getElementById('formGrade').value = st.grade;
+            document.getElementById('formEmail').value = st.email;
+            document.getElementById('formPassword').value = st.password;
+            document.getElementById('studentFormModal').classList.remove('hidden');
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentFormModal').classList.add('hidden');
+        }
+
+        function saveStudent(e) {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('editIndex').value);
+            
+            const newStudent = {
+                id: document.getElementById('formStudentId').value.trim(),
+                name: document.getElementById('formName').value.trim(),
+                grade: document.getElementById('formGrade').value.trim(),
+                email: document.getElementById('formEmail').value.trim(),
+                password: document.getElementById('formPassword').value.trim(),
+            };
+
+            if (editIdx === -1) {
+                // Add new
+                students.push(newStudent);
+                showToast('เพิ่มนักเรียนเรียบร้อยแล้ว!');
+            } else {
+                // Edit existing
+                students[editIdx] = newStudent;
+                showToast('อัปเดตข้อมูลนักเรียนเรียบร้อยแล้ว!');
+            }
+
+            saveToLocalStorage();
+            renderStudentGrid(students);
+            renderTeacherTable();
+            updateCount();
+            closeStudentModal();
+        }
+
+        function deleteStudent(index) {
+            if (confirm(`คุณครูต้องการลบข้อมูลของ "${students[index].name}" หรือไม่?`)) {
+                students.splice(index, 1);
+                saveToLocalStorage();
+                renderStudentGrid(students);
+                renderTeacherTable();
+                updateCount();
+                showToast('ลบข้อมูลเรียบร้อยแล้ว');
+            }
+        }
+
+        function resetDefaultData() {
+            if (confirm('คุณครูต้องการรีเซ็ตข้อมูลเป็นค่าเริ่มต้นเดิมหรือไม่?')) {
+                students = [...initialStudents];
+                saveToLocalStorage();
+                renderStudentGrid(students);
+                renderTeacherTable();
+                updateCount();
+                showToast('คืนค่าข้อมูลเริ่มต้นเรียบร้อยแล้ว');
+            }
+        }
+    </script>
+</body>
+</html>
